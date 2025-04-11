@@ -1,5 +1,5 @@
 import type {CSSProperties, PropType} from "vue";
-import {defineComponent, ref, Transition} from "vue";
+import {defineComponent, ref, Transition, TransitionGroup} from "vue";
 import type {liItemProps} from "./li-menu-type.ts";
 
 const LiMenu = defineComponent({
@@ -27,7 +27,8 @@ const LiMenu = defineComponent({
 
         const ulStyle: CSSProperties = {
             listStyle: 'none',
-            padding: 'unset'
+            padding: 'unset',
+            margin: 'unset',
         };
 
         const liItemDivStyle: CSSProperties = {
@@ -57,14 +58,14 @@ const LiMenu = defineComponent({
         }
     },
     render() {
-        // const slot = this.$slots
-        return <div>
+        return <TransitionGroup name="list" tag="div">
             {this.liItem.map((item: any) => (
-                <ul style={this.ulStyle}>
-                    <li style={this.liItemDivStyle} onClick={(e) => {
-                        e.stopPropagation()
-                        this.toggleMenu(item)
-                    }}>
+                <ul style={this.ulStyle} key={item}>
+                    <li style={this.liItemDivStyle}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            this.toggleMenu(item)
+                        }}>
                         <div style={this.liDivStyle}>
                             {item.content}
                             <span hidden={!item.img && !item.children}>
@@ -84,7 +85,7 @@ const LiMenu = defineComponent({
                                 />
                             </span>
                         </div>
-                        <Transition name="fade" appear>
+                        <Transition name="fade">
                             {!this.menuStateMap[item.name] && (
                                 <LiMenu
                                     liItem={item.children}
@@ -95,7 +96,7 @@ const LiMenu = defineComponent({
                     </li>
                 </ul>
             ))}
-        </div>
+        </TransitionGroup>
     },
 })
 
