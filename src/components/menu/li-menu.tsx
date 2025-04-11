@@ -1,106 +1,102 @@
-import AngleDown from '@/assets/AngleDown.svg';
-import AngleUp from '@/assets/AngleUp.svg';
 import type {CSSProperties, PropType} from "vue";
-import {defineComponent, ref} from "vue";
+import {defineComponent, ref, Transition} from "vue";
+import type {liItemProps} from "./li-menu-type.ts";
 
-type liItem = {
-    content: string,
-    img?: string
-}
-
-const liMenu = defineComponent({
-    name: 'liMenu',
+const LiMenu = defineComponent({
+    name: 'LiMenu',
     props: {
         liItem: {
-            type: Array as PropType<liItem[]>,
+            type: Array as PropType<liItemProps[]>,
             default: [],
         },
         haveImg: {
             type: Boolean,
             default: true
+        },
+        _menuStateMap: {
+            type: Object as PropType<Record<string, boolean>>,
+            default: () => ({}),
         }
     },
     setup(props, {expose}) {
-        const menuHidden = ref<boolean>(false);
 
-        const toggleMenu = () => {
-            menuHidden.value = !menuHidden.value;
+        const menuStateMap = ref(props._menuStateMap);
+        const toggleMenu = ({name}: any) => {
+            menuStateMap.value[name] = !menuStateMap.value[name]
         }
 
         const ulStyle: CSSProperties = {
             listStyle: 'none',
-            padding:'unset'
+            padding: 'unset'
         };
 
         const liItemDivStyle: CSSProperties = {
-            display: 'flex',
-            alignItems: 'center',
             paddingLeft: '8px'
         };
 
+        const liDivStyle: CSSProperties = {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        }
+
         expose({
-            menuHidden,
+            liDivStyle,
+            menuStateMap,
             ulStyle,
             liItemDivStyle,
             toggleMenu
         });
 
         return {
-            menuHidden,
+            liDivStyle,
+            menuStateMap,
             ulStyle,
             liItemDivStyle,
             toggleMenu
         }
     },
     render() {
-        const slot = this.$slots
-        return <ul style={this.ulStyle}>
-            <div onClick={this.toggleMenu} style={{display: 'flex', alignItems: 'center'}}>
-                <img style={{paddingRight: '8px'}}
-                    src={'vue.svg'}
-                    alt={'title img'}
-                    width={16}
-                    height={16}
-                />
-                {slot.title ? slot.title() : <span>title</span>}
-                <span hidden={!this.$props.haveImg}>
-                    {slot.img ? slot.img() :
-                        <>
-                            <img
-                                hidden={this.menuHidden}
-                                src={AngleDown}
-                                alt={"向下"}
-                                width={12}
-                                height={12}
-                            />
-                            <img
-                                hidden={!this.menuHidden}
-                                src={AngleUp}
-                                alt={"向上"}
-                                width={12}
-                                height={12}
-                            />
-                        </>
-                    }
-                </span>
-            </div>
-            <span hidden={!this.menuHidden}>
-              {this.liItem.map((item: any) => (
-                  <div style={this.liItemDivStyle}>
-                      {item.img ?
-                          <img style={{paddingRight: '8px'}}
-                               width={16}
-                               height={16}
-                               src={item.img}
-                               alt={item.content}
-                          /> :
-                          null}
-                      <li>{item.content}</li>
-                  </div>
-              ))}
-            </span>
-        </ul>
+        // const slot = this.$slots
+        return <div>
+            {this.liItem.map((item: any) => (
+                <ul style={this.ulStyle}>
+                    <li style={this.liItemDivStyle} onClick={(e) => {
+                        e.stopPropagation()
+                        this.toggleMenu(item)
+                    }}>
+                        <div style={this.liDivStyle}>
+                            {item.content}
+                            <span hidden={!item.img && !item.children}>
+                                <img
+                                    style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
+                                    src={'AngleDown.svg'}
+                                    alt={"向下"}
+                                    width={12}
+                                    height={12}
+                                />
+                                <img
+                                    style={{display: !this.menuStateMap[item.name] ? '' : 'none'}}
+                                    src={'AngleUp.svg'}
+                                    alt={"向上"}
+                                    width={12}
+                                    height={12}
+                                />
+                            </span>
+                        </div>
+                        <Transition name="fade" appear>
+                            {!this.menuStateMap[item.name] && (
+                                <LiMenu
+                                    liItem={item.children}
+                                    _menuStateMap={this.menuStateMap}
+                                />
+                            )}
+                        </Transition>
+                    </li>
+                </ul>
+            ))}
+        </div>
     },
 })
 
-export default liMenu
+export default LiMenu
