@@ -68,60 +68,78 @@ const LiMenu = defineComponent({
                             this.toggleMenu(item)
                         }}>
                         <div style={this.liDivStyle}>
-                            {
-                                this.collapse === false ?
-                                    <span>
-                                        <span>
-                                            {
-                                                item.img ?
-                                                    <img style={{paddingRight: '8px'}}
-                                                         src={item.img}
-                                                         alt={item.name}
-                                                         width={12}
-                                                         height={12}/> :
-                                                    ''
-                                            }
-                                            {item.content}
-                                        </span>
-                                        <span hidden={!item.children}>
-                                            <img style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
-                                                 src={'AngleDown.svg'}
-                                                 alt={"向下"}
-                                                 width={12}
-                                                 height={12}
-                                            />
-                                            <img style={{display: !this.menuStateMap[item.name] ? '' : 'none'}}
-                                                 src={'AngleUp.svg'}
-                                                 alt={"向上"}
-                                                 width={12}
-                                                 height={12}
-                                            />
-                                        </span>
-                                        </span> :
-                                    <span>
-                                        {
-                                            item.img ?
-                                                <img style={{paddingRight: '8px'}}
-                                                     src={item.img}
-                                                     alt={item.name}
+                            {this.collapse === false ?
+                                <>
+                                    {item.comp ?
+                                        <>
+                                            <item.comp></item.comp>
+                                            <span hidden={!item.children}>
+                                                <img style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
+                                                     src={'AngleDown.svg'}
+                                                     alt={"向下"}
                                                      width={12}
-                                                     height={12}/> :
-                                                (item.content)
-                                        }
-                                    </span>
+                                                     height={12}
+                                                />
+                                                <img style={{display: !this.menuStateMap[item.name] ? '' : 'none'}}
+                                                     src={'AngleUp.svg'}
+                                                     alt={"向上"}
+                                                     width={12}
+                                                     height={12}
+                                                />
+                                            </span>
+                                        </> :
+                                        <>
+                                            <span>
+                                                {
+                                                    item.img ?
+                                                        <img style={{paddingRight: '8px'}}
+                                                             src={item.img}
+                                                             alt={item.name}
+                                                             width={12}
+                                                             height={12}/> :
+                                                        ''
+                                                }
+                                                {item.content}
+                                            </span>
+                                            <span hidden={!item.children}>
+                                                <img style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
+                                                     src={'AngleDown.svg'}
+                                                     alt={"向下"}
+                                                     width={12}
+                                                     height={12}
+                                                />
+                                                <img style={{display: !this.menuStateMap[item.name] ? '' : 'none'}}
+                                                     src={'AngleUp.svg'}
+                                                     alt={"向上"}
+                                                     width={12}
+                                                     height={12}
+                                                />
+                                            </span>
+                                        </>
+                                    }
+                                </> :
+                                <span>
+                                    {item.img ?
+                                        <img style={{paddingRight: '8px'}}
+                                             src={item.img}
+                                             alt={item.name}
+                                             width={12}
+                                             height={12}/> :
+                                        (item.content)
+                                    }
+                                </span>
                             }
                         </div>
                         <Transition name="fade">
-                            {
-                                this.collapse === false ?
-                                    <Transition name="fade">
-                                        {!this.menuStateMap[item.name] && (
-                                            <LiMenu liItem={item.children}
-                                                    __menuStateMap={this.menuStateMap}
-                                            />
-                                        )}
-                                    </Transition> :
-                                    ''
+                            {this.collapse === false ?
+                                <Transition name="fade">
+                                    {!this.menuStateMap[item.name] && (
+                                        <LiMenu liItem={item.children}
+                                                __menuStateMap={this.menuStateMap}
+                                        />
+                                    )}
+                                </Transition> :
+                                ''
                             }
                         </Transition>
                     </li>
