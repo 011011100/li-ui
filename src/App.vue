@@ -6,6 +6,7 @@ const liItem = ref<liItemProps[]>([
   {
     name: '1',
     content: '111',
+    // img:'vite.svg',
     children: [
       {
         name: '1-1',
@@ -32,6 +33,7 @@ const liItem = ref<liItemProps[]>([
   {
     name: '2',
     content: '123',
+    img:'vite.svg',
     children: [
       {
         name: '2-1',
@@ -47,10 +49,12 @@ const liItem = ref<liItemProps[]>([
   }
 ])
 
+const collapse = ref<boolean>(false)
 </script>
 
 <template>
-  <LiMenu :li-item="liItem" style="width: 200px;"/>
+  <button @click="collapse = !collapse">折叠</button>
+  <LiMenu :li-item="liItem" :collapse="collapse" style="width: 200px;"/>
 </template>
 
 <style scoped>
