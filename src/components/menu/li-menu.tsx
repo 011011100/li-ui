@@ -89,7 +89,7 @@ const LiMenu = defineComponent({
                                             </span>
                                         </> :
                                         <>
-                                            <>
+                                            <span>
                                                 {
                                                     item.img ?
                                                         <img style={{paddingRight: '8px'}}
@@ -100,7 +100,7 @@ const LiMenu = defineComponent({
                                                         ''
                                                 }
                                                 {item.content}
-                                            </>
+                                            </span>
                                             <span hidden={!item.children}>
                                                 <img style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
                                                      src={'AngleDown.svg'}
