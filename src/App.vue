@@ -11,10 +11,12 @@ const liItem = ref<liItemProps[]>([
       {
         name: '1-1',
         content: '222',
+        comp: h('div', '213'),
         children: [
           {
             name: '1-1-1',
-            content: '333'
+            content: '333',
+            comp: h('div', '333333')
           }
         ]
       },
