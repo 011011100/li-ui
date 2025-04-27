@@ -1,0 +1,19 @@
+.li-item{
+    padding-left: 8px;
+}
+
+.li-item-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.li-ul{
+    list-style: none;
+    padding: unset;
+    margin: unset;
+}
+
+.li-item-div-img{
+    padding-right: 8px;
+}
