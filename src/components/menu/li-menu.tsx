@@ -2,6 +2,7 @@ import type {PropType} from "vue";
 import {defineComponent, ref, Transition, TransitionGroup} from "vue";
 import type {liItemProps} from "./li-menu-type.ts";
 import './li-menu.css'
+import LiIcon from "../icon/li-icon.tsx";
 
 const LiMenu = defineComponent({
     name: 'LiMenu',
@@ -23,7 +24,9 @@ const LiMenu = defineComponent({
 
         const menuStateMap = ref(props.__menuStateMap);
         const toggleMenu = ({name}: any) => {
-            menuStateMap.value[name] = !menuStateMap.value[name]
+            if (!props.collapse) {
+                menuStateMap.value[name] = !menuStateMap.value[name]
+            }
         }
 
         expose({
@@ -53,17 +56,13 @@ const LiMenu = defineComponent({
                                         <>
                                             <item.comp></item.comp>
                                             <span hidden={!item.children}>
-                                                <img style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
-                                                     src={'AngleDown.svg'}
-                                                     alt={"向下"}
-                                                     width={12}
-                                                     height={12}
+                                                <LiIcon style={{display: this.menuStateMap?.[item.name] ? '' : 'none'}}
+                                                        name={'AngleDown'}
+                                                        size={12}
                                                 />
-                                                <img style={{display: !this.menuStateMap[item.name] ? '' : 'none'}}
-                                                     src={'AngleUp.svg'}
-                                                     alt={"向上"}
-                                                     width={12}
-                                                     height={12}
+                                                <LiIcon style={{display: !this.menuStateMap?.[item.name] ? '' : 'none'}}
+                                                        name={'AngleUp'}
+                                                        size={12}
                                                 />
                                             </span>
                                         </> :
@@ -81,17 +80,13 @@ const LiMenu = defineComponent({
                                                 {item.content}
                                             </span>
                                             <span hidden={!item.children}>
-                                                <img style={{display: this.menuStateMap[item.name] ? '' : 'none'}}
-                                                     src={'AngleDown.svg'}
-                                                     alt={"向下"}
-                                                     width={12}
-                                                     height={12}
+                                                <LiIcon style={{display: this.menuStateMap?.[item.name] ? '' : 'none'}}
+                                                        name={'AngleDown'}
+                                                        size={12}
                                                 />
-                                                <img style={{display: !this.menuStateMap[item.name] ? '' : 'none'}}
-                                                     src={'AngleUp.svg'}
-                                                     alt={"向上"}
-                                                     width={12}
-                                                     height={12}
+                                                <LiIcon style={{display: !this.menuStateMap?.[item.name] ? '' : 'none'}}
+                                                        name={'AngleUp'}
+                                                        size={12}
                                                 />
                                             </span>
                                         </>
